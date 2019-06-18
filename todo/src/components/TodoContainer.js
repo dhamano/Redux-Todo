@@ -7,7 +7,7 @@ import TodoList from './TodoList';
 class TodoContainer extends React.Component {
 
   render() {
-    let highestID = Math.max.apply(Math, this.props.todoList.map(function(item) { return item.id; }))
+    let highestID = Math.max.apply(Math, this.props.todoList.map(item => item.id));
     return (
       <div className="todo-container">
         <TodoForm lastID={highestID} />

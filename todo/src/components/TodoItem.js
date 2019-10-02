@@ -1,36 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { changeTodo } from '../actions';
+import { changeTodo, removeTask } from '../actions';
 
 class TodoItem extends React.Component {
-  state = {
-    isDone: this.props.todoItem.isComplete,
-    item: {
-      id: this.props.todoItem.id,
-      task: this.props.todoItem.task,
-      isComplete: this.props.todoItem.isComplete
-    }
-  }
 
   onClick = event => {
     event.preventDefault();
-    this.setState({
-      isDone: !this.state.isDone
-    });
-    this.props.changeTodo(this.state.item);
+    this.props.changeTodo(this.props.todoItem.id);
+  }
+
+  removeTask = event => {
+    event.preventDefault();
+    this.props.removeTask(this.props.todoItem.id);
   }
 
   render() {
     return(
-      <li onClick={this.onClick} className={`${this.state.isDone ? 'done' : 'todo'}`}>{this.props.todoItem.task}</li>
+      <li onClick={this.onClick} key={this.props.todoItem.id} className={`${this.props.todoItem.isComplete ? 'done' : 'todo'}`}>{this.props.todoItem.task}<button onClick={this.removeTask} title="Remove Task">X</button></li>
     );
   }
 }
 
 const mapStateToProps = state => {
   return {
-    id: state.id
+    id: state.id,
+    task: state.task,
+    isComplete: state.isComplete
   };
 };
 
-export default connect( mapStateToProps, { changeTodo })(TodoItem);
+export default connect( mapStateToProps, { changeTodo, removeTask })(TodoItem);

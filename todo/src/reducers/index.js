@@ -1,3 +1,5 @@
+import { ADD_TODO, CHANGE_TODO, REMOVE_COMPLETED_TASKS, REMOVE_TASK } from '../actions';
+
 const initialState = {
   todoList: [
     {
@@ -20,17 +22,28 @@ const initialState = {
 
 export const reducer = ( state = initialState, action) => {
   switch (action.type) {
-    case "ADD_TODO":
+    case ADD_TODO:
       return {
         ...state,
         todoList: [...state.todoList, action.payload]
       }
-      case "CHANGE_TODO":
-        state.todoList[action.payload.id] = action.payload;
-        return {
-          ...state,
-          todoList: [...state.todoList]
-        }
+    case CHANGE_TODO:
+      return {
+        ...state,
+        todoList: state.todoList.map( item => {
+          return (item.id === action.payload.id) ? {...item, isComplete: !item.isComplete} : item;
+        })
+      }
+    case REMOVE_COMPLETED_TASKS:
+      return {
+        ...state,
+        todoList: state.todoList.filter( item => !item.isComplete )
+      }
+    case REMOVE_TASK:
+      return {
+        ...state,
+        todoList: state.todoList.filter( item => item.id !== action.payload.id )
+      }
     default:
       return state;
   }

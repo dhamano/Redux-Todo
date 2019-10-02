@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addTodo } from '../actions';
+import { addTodo, removeCompleted } from '../actions';
 
 class TodoForm extends React.Component {
   state = {
     id: 0,
-    todoName: '',
+    task: '',
     isComplete: false
   }
 
@@ -17,12 +17,17 @@ class TodoForm extends React.Component {
     }
   }
 
+  removeCompleted = event => {
+    event.preventDefault();
+    this.props.removeCompleted();
+  }
+
   submit = event => {
     event.preventDefault();
-    this.props.addTodo(this.state.todoName);
+    this.props.addTodo(this.state);
     this.setState({
       id: this.state.id + 1,
-      todoName: ''
+      task: ''
     })
   }
 
@@ -31,12 +36,12 @@ class TodoForm extends React.Component {
   }
 
   render() {
-    console.log(this.props);
     return (
       <form onSubmit={this.submit} className="todo-form">
         <h2>Add Task:</h2>
-        <input type="text" onChange={this.onChangeHandler} placeholder="New Todo Item" name="todoName" value={this.state.todoName} />
+        <input type="text" onChange={this.onChangeHandler} placeholder="New Todo Item" name="task" value={this.state.task} required />
         <button type="submit" name="submit">Add Todo</button>
+        <button type="button" onClick={this.removeCompleted} name="remove">Remove Completed</button>
       </form>
     );
   }
@@ -48,4 +53,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect( mapStateToProps, { addTodo })(TodoForm);
+export default connect( mapStateToProps, { addTodo, removeCompleted })(TodoForm);
